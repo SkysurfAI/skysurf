@@ -42,7 +42,8 @@ dependencies = [
 [project.optional-dependencies]
 parquet = ["pyarrow>=15.0"]
 sqlalchemy = ["sqlalchemy>=2.0"]
-all = ["pyarrow>=15.0", "sqlalchemy>=2.0"]
+trendlines = ["trendln>=0.1.10"]
+all = ["pyarrow>=15.0", "sqlalchemy>=2.0", "trendln>=0.1.10"]
 dev = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
@@ -51,6 +52,7 @@ dev = [
     "pandas-stubs>=2.0",
     "pyarrow>=15.0",
     "sqlalchemy>=2.0",
+    "trendln>=0.1.10",
     "build>=1.2",
     "twine>=5.0",
 ]
@@ -129,7 +131,7 @@ disallow_untyped_decorators = true
 files = ["src/skysurf"]
 
 [[tool.mypy.overrides]]
-module = ["ta.*", "scipy.*", "pyarrow.*"]
+module = ["ta.*", "scipy.*", "pyarrow.*", "trendln.*"]
 ignore_missing_imports = true
 
 # ── Tests / coverage ────────────────────────────────────────────────
