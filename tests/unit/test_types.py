@@ -1,4 +1,4 @@
-"""Tests for the public dataclasses and enums in :mod:`skysurf.brain.types`."""
+"""Tests for the public dataclasses and enums in :mod:`skysurf.types`."""
 
 from __future__ import annotations
 

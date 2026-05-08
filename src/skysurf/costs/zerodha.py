@@ -17,7 +17,7 @@ Cost composition
   scrip (₹13.50 + 18% GST). DP applies to partial sells as well — every
   sell is a separate DP-charged transaction.
 
-The functions accept either a :class:`~skysurf.brain.config.StrategyConfig`
+The functions accept either a :class:`~skysurf.config.StrategyConfig`
 instance (attribute access) or a plain mapping (dict-like), so they can
 be used both inside the brain and from external test harnesses without
 coercion.

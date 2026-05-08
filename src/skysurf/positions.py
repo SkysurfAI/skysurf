@@ -22,9 +22,9 @@ from datetime import date
 
 import pandas as pd
 
-from skysurf.brain.config import PHASE_4_V1, StrategyConfig
-from skysurf.brain.types import Position, PositionAction
+from skysurf.config import PHASE_4_V1, StrategyConfig
 from skysurf.data.provider import DataProvider
+from skysurf.types import Position, PositionAction
 
 
 def manage_positions(

@@ -155,7 +155,7 @@ class DataProvider(ABC):
 
         The brain applies the ``market_cap_floor_inr`` and
         ``adtv_floor_inr`` filters from
-        :class:`~skysurf.brain.config.StrategyConfig` on this universe.
+        :class:`~skysurf.config.StrategyConfig` on this universe.
         Implementations are responsible for handling listing-based
         eligibility (suspended tickers, recent listings, etc.).
         """

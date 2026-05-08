@@ -146,7 +146,7 @@ class EntrySignal:
     """A ranked recommendation to open a new position this Friday.
 
     The brain returns these from
-    :func:`skysurf.brain.signals.generate_weekly_signals`. The caller
+    :func:`skysurf.signals.generate_weekly_signals`. The caller
     decides whether to act on each (e.g., by submitting a broker order).
     The brain has no visibility into whether the order fills.
     """

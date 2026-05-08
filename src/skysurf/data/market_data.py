@@ -6,7 +6,7 @@ solely so the brain can pass a single object into the entry-detection
 and exit-evaluation paths.
 
 The brain assembles a :class:`MarketData` inside
-:func:`skysurf.brain.signals.generate_weekly_signals` (and the
+:func:`skysurf.signals.generate_weekly_signals` (and the
 positions counterpart), populates it from
 :class:`~skysurf.data.provider.DataProvider` calls, and discards it when
 the call returns. The brain holds no state across calls.

@@ -21,9 +21,9 @@ from datetime import date
 
 import pandas as pd
 
-from skysurf.brain.config import PHASE_4_V1, StrategyConfig
-from skysurf.brain.types import EntrySignal, Position
+from skysurf.config import PHASE_4_V1, StrategyConfig
 from skysurf.data.provider import DataProvider
+from skysurf.types import EntrySignal, Position
 
 
 def generate_weekly_signals(
