@@ -39,7 +39,7 @@ env/
 dmypy.json
 
 # User data — never commit OHLCV data or user-supplied connector inputs
-data/
+/data/
 *.parquet
 *.csv
 *.feather
@@ -48,10 +48,13 @@ data/
 *.sqlite3
 *.db
 
-# Allow examples that ship with the repo (synthetic data only)
+# Allow examples and test fixtures that ship with the repo (synthetic data only)
 !examples/**/*.py
 !tests/**/*.csv
 !tests/**/*.parquet
+
+# The src/skysurf/data/ subpackage is the connector module — not user data.
+!src/skysurf/data/
 
 # Logs / runtime
 *.log
