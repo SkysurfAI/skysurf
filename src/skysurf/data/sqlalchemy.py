@@ -149,16 +149,13 @@ class SQLAlchemyDataProvider(DataProvider):
             f"ORDER BY sector, date"
         ).bindparams(bindparam("sectors", expanding=True))
 
+        params: dict[str, object] = {
+            "sectors": sectors_list,
+            "start": _iso(start),
+            "end": _iso(end),
+        }
         with self._engine.connect() as conn:
-            df = pd.read_sql(
-                stmt,
-                conn,
-                params={
-                    "sectors": sectors_list,
-                    "start": _iso(start),
-                    "end": _iso(end),
-                },
-            )
+            df: pd.DataFrame = pd.read_sql(stmt, conn, params=params)  # type: ignore[arg-type]
         if df.empty:
             return {}
         out: dict[str, pd.DataFrame] = {}
@@ -228,16 +225,13 @@ class SQLAlchemyDataProvider(DataProvider):
             f"ORDER BY ticker, date"
         ).bindparams(bindparam("tickers", expanding=True))
 
+        params: dict[str, object] = {
+            "tickers": tickers_list,
+            "start": _iso(start),
+            "end": _iso(end),
+        }
         with self._engine.connect() as conn:
-            df = pd.read_sql(
-                stmt,
-                conn,
-                params={
-                    "tickers": tickers_list,
-                    "start": _iso(start),
-                    "end": _iso(end),
-                },
-            )
+            df: pd.DataFrame = pd.read_sql(stmt, conn, params=params)  # type: ignore[arg-type]
         if df.empty:
             return {}
 
@@ -254,7 +248,10 @@ class SQLAlchemyDataProvider(DataProvider):
         from sqlalchemy import text
 
         with self._engine.connect() as conn:
-            return pd.read_sql(text(sql), conn, params=params or {})
+            # pandas-stubs is strict about the params shape; SQLAlchemy
+            # accepts a plain dict at runtime so the cast is safe.
+            df: pd.DataFrame = pd.read_sql(text(sql), conn, params=params or {})  # type: ignore[arg-type]
+            return df
 
     @staticmethod
     def _index_by_date(df: pd.DataFrame) -> pd.DataFrame:
@@ -280,7 +277,7 @@ def _iso(value: pd.Timestamp | str) -> str:
     """
     if isinstance(value, str):
         return value
-    return pd.Timestamp(value).isoformat()
+    return str(pd.Timestamp(value).isoformat())
 
 
 __all__ = ["SQLAlchemyDataProvider", "TableMap"]

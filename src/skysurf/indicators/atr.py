@@ -49,4 +49,7 @@ def calculate_atr(
     if len(close) < window:
         return pd.Series([float("nan")] * len(close), index=close.index, name="atr")
 
-    return AverageTrueRange(high=high, low=low, close=close, window=window).average_true_range()
+    atr: pd.Series = AverageTrueRange(
+        high=high, low=low, close=close, window=window
+    ).average_true_range()
+    return atr

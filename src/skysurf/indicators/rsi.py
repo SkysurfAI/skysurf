@@ -23,4 +23,5 @@ def calculate_rsi(close: pd.Series, window: int = 14) -> pd.Series:
         RSI series aligned with ``close.index``. The first ``window``
         values are NaN by definition.
     """
-    return RSIIndicator(close=close, window=window).rsi()
+    rsi: pd.Series = RSIIndicator(close=close, window=window).rsi()
+    return rsi

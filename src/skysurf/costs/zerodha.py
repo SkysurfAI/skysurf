@@ -26,7 +26,9 @@ coercion.
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any
+from typing import Any, TypeVar
+
+_T = TypeVar("_T")
 
 #: Buy-side regulatory percentage: STT + txn + SEBI + stamp + GST.
 ZERODHA_BUY_PCT: float = 0.0011874
@@ -54,10 +56,12 @@ def buy_cost_factor(cfg: Mapping[str, Any] | object) -> float:
     * ``brokerage_pct`` — per-side brokerage in the FLAT model only
       (default ``0.0011``). Ignored under ``"ZERODHA"`` (delivery is free).
     """
-    slippage = _read(cfg, "slippage_pct", 0.001)
-    if _read(cfg, "cost_model", "FLAT") == "ZERODHA":
+    slippage: float = _read(cfg, "slippage_pct", 0.001)
+    cost_model: str = _read(cfg, "cost_model", "FLAT")
+    if cost_model == "ZERODHA":
         return 1 + ZERODHA_BUY_PCT + slippage
-    return 1 + slippage + _read(cfg, "brokerage_pct", 0.0011)
+    brokerage: float = _read(cfg, "brokerage_pct", 0.0011)
+    return 1 + slippage + brokerage
 
 
 def buy_cost(qty: float, price: float, cfg: Mapping[str, Any] | object) -> float:
@@ -73,18 +77,23 @@ def sell_proceeds(qty: float, price: float, cfg: Mapping[str, Any] | object) -> 
     transaction. Under the FLAT model: subtracts only slippage and
     brokerage.
     """
-    slippage = _read(cfg, "slippage_pct", 0.001)
-    if _read(cfg, "cost_model", "FLAT") == "ZERODHA":
+    slippage: float = _read(cfg, "slippage_pct", 0.001)
+    cost_model: str = _read(cfg, "cost_model", "FLAT")
+    if cost_model == "ZERODHA":
         return qty * price * (1 - ZERODHA_SELL_PCT - slippage) - ZERODHA_DP_FLAT
-    return qty * price * (1 - slippage - _read(cfg, "brokerage_pct", 0.0011))
+    brokerage: float = _read(cfg, "brokerage_pct", 0.0011)
+    return qty * price * (1 - slippage - brokerage)
 
 
-def _read(cfg: Mapping[str, Any] | object, key: str, default: Any) -> Any:
+def _read(cfg: Mapping[str, Any] | object, key: str, default: _T) -> _T:
     """Read ``key`` from either a mapping (``cfg.get``) or a dataclass (``getattr``).
 
     This lets the cost helpers accept both ``StrategyConfig`` instances
-    and plain dicts without coercion.
+    and plain dicts without coercion. The return type matches the type
+    of ``default`` so callers stay statically type-checked.
     """
-    if hasattr(cfg, "get") and not hasattr(cfg, "__dataclass_fields__"):
-        return cfg.get(key, default)  # type: ignore[union-attr]
-    return getattr(cfg, key, default)
+    if isinstance(cfg, Mapping):
+        result: _T = cfg.get(key, default)
+        return result
+    result = getattr(cfg, key, default)
+    return result

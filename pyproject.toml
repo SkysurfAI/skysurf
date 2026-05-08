@@ -48,6 +48,7 @@ dev = [
     "pytest-cov>=5.0",
     "ruff>=0.6",
     "mypy>=1.10",
+    "pandas-stubs>=2.0",
     "pyarrow>=15.0",
     "sqlalchemy>=2.0",
     "build>=1.2",

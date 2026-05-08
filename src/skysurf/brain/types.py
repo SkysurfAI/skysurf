@@ -22,13 +22,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date as _date
 from enum import Enum
-from typing import Any
+from typing import Any, TypeAlias
 
 import pandas as pd
 
 # Type alias: most callers pass a `datetime.date`; the engine internally
 # converts to `pd.Timestamp`. Both are accepted.
-DateLike = _date | pd.Timestamp
+DateLike: TypeAlias = _date | pd.Timestamp
 
 
 class ActionType(str, Enum):
