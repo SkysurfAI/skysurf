@@ -5,6 +5,7 @@ Phase 4 configuration (``rsi_gate`` is ``None``), but RSI is exposed
 because it is referenced in the cache-adapter pipeline and useful for
 downstream analytics.
 """
+
 from __future__ import annotations
 
 import pandas as pd

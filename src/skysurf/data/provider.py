@@ -25,6 +25,7 @@ Production callers (e.g., a managed-service runtime) typically write
 their own DataProvider that translates brain requests into DB queries
 or cached fetches.
 """
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -169,9 +170,7 @@ class DataProvider(ABC):
         """
 
     @abstractmethod
-    def get_overall_regime_snapshot(
-        self, week_date: pd.Timestamp
-    ) -> OverallRegimeSnapshot | None:
+    def get_overall_regime_snapshot(self, week_date: pd.Timestamp) -> OverallRegimeSnapshot | None:
         """Return the overall market regime + breadth for ``week_date``.
 
         Returns ``None`` if the regime has not been computed for that
@@ -180,9 +179,7 @@ class DataProvider(ABC):
         """
 
     @abstractmethod
-    def get_sector_regime_for(
-        self, week_date: pd.Timestamp, ticker: str
-    ) -> str | None:
+    def get_sector_regime_for(self, week_date: pd.Timestamp, ticker: str) -> str | None:
         """Return the sector-level Weinstein regime for ``ticker`` this week.
 
         Returns one of ``"bull"``, ``"bear"``, ``"sideways"``, or
@@ -192,9 +189,7 @@ class DataProvider(ABC):
         """
 
     @abstractmethod
-    def get_sector_rs_quartile_for(
-        self, week_date: pd.Timestamp, ticker: str
-    ) -> str | None:
+    def get_sector_rs_quartile_for(self, week_date: pd.Timestamp, ticker: str) -> str | None:
         """Return the sector-RS quartile for ``ticker`` this week.
 
         Returns one of ``"TOP"``, ``"UPPER"``, ``"LOWER"``,
@@ -203,9 +198,7 @@ class DataProvider(ABC):
         ``None`` falls through per research convention).
         """
 
-    def is_ticker_in_universe_for(
-        self, ticker: str, week_date: pd.Timestamp
-    ) -> bool:
+    def is_ticker_in_universe_for(self, ticker: str, week_date: pd.Timestamp) -> bool:
         """Return whether ``ticker`` qualifies in the universe at ``week_date``.
 
         Default returns ``True``. Concrete providers may override to
@@ -325,13 +318,9 @@ class InMemoryDataProvider(DataProvider):
         return self.universe[self.universe["ticker"].isin(qualifying)]
 
     def get_historical_trades(self, before_date: pd.Timestamp) -> pd.DataFrame:
-        return self.historical_trades[
-            self.historical_trades["week_date"] < before_date
-        ]
+        return self.historical_trades[self.historical_trades["week_date"] < before_date]
 
-    def get_overall_regime_snapshot(
-        self, week_date: pd.Timestamp
-    ) -> OverallRegimeSnapshot | None:
+    def get_overall_regime_snapshot(self, week_date: pd.Timestamp) -> OverallRegimeSnapshot | None:
         if self.overall_regime_df is None:
             return None
         if week_date not in self.overall_regime_df.index:
@@ -346,9 +335,7 @@ class InMemoryDataProvider(DataProvider):
             "breadth_pct": float(breadth) if breadth is not None and not pd.isna(breadth) else 0.0,
         }
 
-    def get_sector_regime_for(
-        self, week_date: pd.Timestamp, ticker: str
-    ) -> str | None:
+    def get_sector_regime_for(self, week_date: pd.Timestamp, ticker: str) -> str | None:
         if self.sector_regime_lookup is None or self.ticker_metadata is None:
             return None
         meta = self.ticker_metadata.get(ticker)
@@ -368,9 +355,7 @@ class InMemoryDataProvider(DataProvider):
             return True
         return ticker in qualifying
 
-    def get_sector_rs_quartile_for(
-        self, week_date: pd.Timestamp, ticker: str
-    ) -> str | None:
+    def get_sector_rs_quartile_for(self, week_date: pd.Timestamp, ticker: str) -> str | None:
         if self.sector_rs_lookup is None or self.ticker_metadata is None:
             return None
         meta = self.ticker_metadata.get(ticker)

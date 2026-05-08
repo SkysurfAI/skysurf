@@ -16,6 +16,7 @@ Design notes:
     * :class:`ActionType` is the closed set of decisions the brain emits
       per held position.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

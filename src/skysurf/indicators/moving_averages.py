@@ -5,6 +5,7 @@ baselines, SMA-25 for primary regime, EMA-40 for VCP baselines, SMA-27
 for the initial trailing stop, etc.). All of them are computed via the
 single :func:`compute_ma_series` helper below.
 """
+
 from __future__ import annotations
 
 from typing import Literal

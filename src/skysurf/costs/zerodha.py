@@ -22,6 +22,7 @@ instance (attribute access) or a plain mapping (dict-like), so they can
 be used both inside the brain and from external test harnesses without
 coercion.
 """
+
 from __future__ import annotations
 
 from collections.abc import Mapping

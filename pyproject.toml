@@ -103,7 +103,11 @@ ignore = [
     "E501",   # line-too-long (handled by formatter)
     "N803",   # function-arg lowercase (we use df, ATR, etc.)
     "N806",   # variable-in-function lowercase (same)
+    "RUF001", # ambiguous unicode in strings (we use ─ — × in docs intentionally)
+    "RUF002", # ambiguous unicode in docstrings
     "RUF012", # mutable-class-defaults
+    "RUF022", # __all__ ordering (we group ours by functional area)
+    "UP042",  # StrEnum vs (str, Enum) — kept for back-compat with serialised strings
 ]
 
 [tool.ruff.lint.per-file-ignores]

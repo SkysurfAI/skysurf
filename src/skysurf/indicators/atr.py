@@ -9,6 +9,7 @@ The Skysurf strategy uses 14-period ATR on weekly bars to size stop
 distances (`exit_atr_buffer * ATR` below the trailing moving average) and
 to define the climactic-extension threshold.
 """
+
 from __future__ import annotations
 
 import pandas as pd
@@ -40,8 +41,7 @@ def calculate_atr(
     """
     if not (len(high) == len(low) == len(close)):
         raise ValueError(
-            f"high, low, close must share length: "
-            f"got {len(high)}, {len(low)}, {len(close)}"
+            f"high, low, close must share length: got {len(high)}, {len(low)}, {len(close)}"
         )
     if not (high.index.equals(low.index) and high.index.equals(close.index)):
         raise ValueError("high, low, close must share index")

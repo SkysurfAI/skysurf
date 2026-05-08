@@ -4,6 +4,7 @@ Wrappers around the :mod:`ta` library plus a small moving-average helper.
 Public surface kept minimal — only the indicators the brain consumes are
 exposed.
 """
+
 from __future__ import annotations
 
 from skysurf.indicators.atr import calculate_atr

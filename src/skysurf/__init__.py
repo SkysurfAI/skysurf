@@ -15,6 +15,7 @@ strategy. The public surface is intentionally small:
 See ``README.md`` for a 5-minute quickstart and ``docs/guide.md`` for
 the end-to-end user guide.
 """
+
 from __future__ import annotations
 
 from skysurf.brain import (
@@ -38,9 +39,13 @@ from skysurf.costs import (
     sell_proceeds,
 )
 from skysurf.data import (
+    CsvDataProvider,
     DataProvider,
     InMemoryDataProvider,
     OverallRegimeSnapshot,
+    PandasDataProvider,
+    ParquetDataProvider,
+    SQLAlchemyDataProvider,
 )
 from skysurf.indicators import calculate_atr, calculate_rsi, compute_ma_series
 
@@ -63,6 +68,10 @@ __all__ = [
     "DataProvider",
     "InMemoryDataProvider",
     "OverallRegimeSnapshot",
+    "PandasDataProvider",
+    "CsvDataProvider",
+    "ParquetDataProvider",
+    "SQLAlchemyDataProvider",
     # Costs
     "ZERODHA_BUY_PCT",
     "ZERODHA_SELL_PCT",

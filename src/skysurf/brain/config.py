@@ -20,6 +20,7 @@ Field names match the equivalent CONFIG-dict keys in the original
 research code so that the porting diff stays readable. See
 :doc:`/docs/strategy.md` for the public-facing description.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -297,7 +298,7 @@ _INR_CRORE = 1e7
 PHASE_4_V1 = StrategyConfig(
     # Universe filters
     market_cap_floor_inr=1_500 * _INR_CRORE,  # ₹1,500 Cr
-    adtv_floor_inr=2 * _INR_CRORE,            # ₹2 Cr 20-day avg
+    adtv_floor_inr=2 * _INR_CRORE,  # ₹2 Cr 20-day avg
     # Regime gate
     regime_combination="OVERALL_OR_SECTOR",
     overall_breadth_threshold=60,
@@ -312,18 +313,18 @@ PHASE_4_V1 = StrategyConfig(
     rr_floor=0,
     # Entry detection
     entry_mas_per_type={
-        "PULLBACK_S2":       ("EMA", 20),
+        "PULLBACK_S2": ("EMA", 20),
         "BREAKOUT_S1_TO_S2": ("SMA", 40),
-        "VCP_CONTINUATION":  ("EMA", 40),
-        "RETEST_SUPPORT":    ("SMA", 40),
-        "TRENDLINE_BOUNCE":  ("EMA", 40),
+        "VCP_CONTINUATION": ("EMA", 40),
+        "RETEST_SUPPORT": ("SMA", 40),
+        "TRENDLINE_BOUNCE": ("EMA", 40),
     },
     base_min_weeks_per_type={
-        "PULLBACK_S2":       12,
+        "PULLBACK_S2": 12,
         "BREAKOUT_S1_TO_S2": 0,
-        "VCP_CONTINUATION":  4,
-        "RETEST_SUPPORT":    8,
-        "TRENDLINE_BOUNCE":  8,
+        "VCP_CONTINUATION": 4,
+        "RETEST_SUPPORT": 8,
+        "TRENDLINE_BOUNCE": 8,
     },
     swing_order=8,
     swing_order_minor=5,
@@ -350,11 +351,11 @@ PHASE_4_V1 = StrategyConfig(
     type_prior_min_total_n=100,
     type_prior_default=1.0,
     static_type_prior_reference={
-        "PULLBACK_S2":       2.92,
-        "VCP_CONTINUATION":  2.19,
+        "PULLBACK_S2": 2.92,
+        "VCP_CONTINUATION": 2.19,
         "BREAKOUT_S1_TO_S2": 2.12,
-        "RETEST_SUPPORT":    1.61,
-        "TRENDLINE_BOUNCE":  1.21,
+        "RETEST_SUPPORT": 1.61,
+        "TRENDLINE_BOUNCE": 1.21,
     },
     # Sizing
     risk_pct=0.01,

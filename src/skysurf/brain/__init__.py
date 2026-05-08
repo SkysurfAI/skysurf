@@ -9,6 +9,7 @@ Most callers import directly from :mod:`skysurf` (the top-level package
 re-exports everything stable) — this submodule namespace exists so the
 internal layout is discoverable.
 """
+
 from __future__ import annotations
 
 from skysurf.brain.config import PHASE_4_V1, SUSPENDED_ENTRY_TYPES, StrategyConfig

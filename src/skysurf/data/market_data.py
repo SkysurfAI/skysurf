@@ -11,6 +11,7 @@ positions counterpart), populates it from
 :class:`~skysurf.data.provider.DataProvider` calls, and discards it when
 the call returns. The brain holds no state across calls.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
