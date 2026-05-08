@@ -112,7 +112,7 @@ The brain itself does not place orders. You wire the broker.
 Skysurf ships a comprehensive test suite that runs on synthetic data — no setup, no external dependencies:
 
 ```bash
-git clone https://github.com/<org>/skysurf.git
+git clone https://github.com/SkysurfAI/skysurf.git
 cd skysurf
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
@@ -204,4 +204,4 @@ Every parameter is documented in [strategy.md](strategy.md). Re-validate on your
 * [connectors.md](connectors.md) — pick your connector, write your own
 * [data-schema.md](data-schema.md) — exact column names and dtypes
 
-If you get stuck, [open an issue](https://github.com/<org>/skysurf/issues) — include the Python version, your connector, and a minimal reproduction.
+If you get stuck, [open an issue](https://github.com/SkysurfAI/skysurf/issues) — include the Python version, your connector, and a minimal reproduction.

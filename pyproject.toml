@@ -55,11 +55,11 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/<org>/skysurf"
-Documentation = "https://github.com/<org>/skysurf/tree/main/docs"
-Repository = "https://github.com/<org>/skysurf"
-Issues = "https://github.com/<org>/skysurf/issues"
-Changelog = "https://github.com/<org>/skysurf/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/SkysurfAI/skysurf"
+Documentation = "https://github.com/SkysurfAI/skysurf/tree/main/docs"
+Repository = "https://github.com/SkysurfAI/skysurf"
+Issues = "https://github.com/SkysurfAI/skysurf/issues"
+Changelog = "https://github.com/SkysurfAI/skysurf/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/skysurf"]

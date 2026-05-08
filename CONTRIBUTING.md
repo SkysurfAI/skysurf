@@ -5,7 +5,7 @@ Thanks for considering a contribution. This document covers the basics; for subs
 ## Development setup
 
 ```bash
-git clone https://github.com/<org>/skysurf.git
+git clone https://github.com/SkysurfAI/skysurf.git
 cd skysurf
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
