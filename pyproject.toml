@@ -1,0 +1,157 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "skysurf"
+version = "0.1.0"
+description = "Production trading-signal library implementing the Skysurf Phase 4 strategy."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Skysurf contributors" },
+]
+keywords = [
+    "trading",
+    "quantitative-finance",
+    "indian-equities",
+    "nse",
+    "swing-trading",
+    "signals",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Typing :: Typed",
+]
+dependencies = [
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "ta==0.11.0",
+]
+
+[project.optional-dependencies]
+parquet = ["pyarrow>=15.0"]
+sqlalchemy = ["sqlalchemy>=2.0"]
+all = ["pyarrow>=15.0", "sqlalchemy>=2.0"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.6",
+    "mypy>=1.10",
+    "pyarrow>=15.0",
+    "sqlalchemy>=2.0",
+    "build>=1.2",
+    "twine>=5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/<org>/skysurf"
+Documentation = "https://github.com/<org>/skysurf/tree/main/docs"
+Repository = "https://github.com/<org>/skysurf"
+Issues = "https://github.com/<org>/skysurf/issues"
+Changelog = "https://github.com/<org>/skysurf/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/skysurf"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/skysurf",
+    "tests",
+    "docs",
+    "examples",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "TRADEMARK.md",
+    "CHANGELOG.md",
+]
+
+# ── Lint / format ────────────────────────────────────────────────────
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "examples"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "N",   # pep8-naming
+    "RUF", # ruff-specific
+    "SIM", # flake8-simplify
+    "TID", # flake8-tidy-imports
+    "PT",  # flake8-pytest-style
+    "PTH", # flake8-use-pathlib
+]
+ignore = [
+    "E501",   # line-too-long (handled by formatter)
+    "N803",   # function-arg lowercase (we use df, ATR, etc.)
+    "N806",   # variable-in-function lowercase (same)
+    "RUF012", # mutable-class-defaults
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["B011", "PT011", "PT012"]
+"examples/**/*.py" = ["T201"]  # allow print()
+
+[tool.ruff.format]
+quote-style = "double"
+
+# ── Type-checking ────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_return_any = true
+disallow_untyped_decorators = true
+files = ["src/skysurf"]
+
+[[tool.mypy.overrides]]
+module = ["ta.*", "scipy.*", "pyarrow.*"]
+ignore_missing_imports = true
+
+# ── Tests / coverage ────────────────────────────────────────────────
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--showlocals",
+]
+testpaths = ["tests"]
+markers = [
+    "integration: tests that need external data (gated by SKYSURF_TEST_DATA)",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["skysurf"]
+parallel = true
+
+[tool.coverage.report]
+fail_under = 80
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
+show_missing = true

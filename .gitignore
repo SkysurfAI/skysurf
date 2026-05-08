@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.hypothesis/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Build / type-check artifacts
+*.pyi
+.dmypy.json
+dmypy.json
+
+# User data — never commit OHLCV data or user-supplied connector inputs
+data/
+*.parquet
+*.csv
+*.feather
+*.duckdb
+*.sqlite
+*.sqlite3
+*.db
+
+# Allow examples that ship with the repo (synthetic data only)
+!examples/**/*.py
+!tests/**/*.csv
+!tests/**/*.parquet
+
+# Logs / runtime
+*.log
+logs/
+
+# Distribution
+*.tar.gz
+*.whl
