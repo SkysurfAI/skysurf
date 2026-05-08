@@ -13,6 +13,8 @@ internal layout is discoverable.
 from __future__ import annotations
 
 from skysurf.brain.config import PHASE_4_V1, SUSPENDED_ENTRY_TYPES, StrategyConfig
+from skysurf.brain.positions import manage_positions
+from skysurf.brain.signals import generate_weekly_signals
 from skysurf.brain.types import (
     ActionType,
     EntrySignal,
@@ -34,4 +36,6 @@ __all__ = [
     "TrailMode",
     "TripleStackTighten",
     "ValidationResult",
+    "generate_weekly_signals",
+    "manage_positions",
 ]

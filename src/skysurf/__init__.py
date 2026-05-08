@@ -29,6 +29,8 @@ from skysurf.brain import (
     TrailMode,
     TripleStackTighten,
     ValidationResult,
+    generate_weekly_signals,
+    manage_positions,
 )
 from skysurf.costs import (
     ZERODHA_BUY_PCT,
@@ -83,4 +85,7 @@ __all__ = [
     "calculate_atr",
     "calculate_rsi",
     "compute_ma_series",
+    # API
+    "generate_weekly_signals",
+    "manage_positions",
 ]
