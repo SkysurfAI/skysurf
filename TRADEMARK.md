@@ -15,7 +15,7 @@ The name **Skysurf** and the Skysurf logo (collectively, "the Marks") are tradem
 - Implying endorsement, affiliation, or sponsorship by the Skysurf project.
 - Using the Marks in a domain name (e.g., `skysurf.something.com`) for commercial purposes.
 
-If you want to do any of the above, contact the maintainers (see `README.md`). We're generally happy to grant permission for non-confusing uses.
+If you want to do any of the above, contact the maintainers via [skysurfai.com](https://www.skysurfai.com/). We're generally happy to grant permission for non-confusing uses.
 
 ## Forks
 

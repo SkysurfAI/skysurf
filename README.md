@@ -2,6 +2,8 @@
 
 **A production trading-signal library for Indian equities, implementing the validated Phase 4 swing-trading strategy.**
 
+**Website:** [skysurfai.com](https://www.skysurfai.com/) · **Source:** [github.com/SkysurfAI/skysurf](https://github.com/SkysurfAI/skysurf)
+
 [![CI](https://github.com/SkysurfAI/skysurf/actions/workflows/ci.yml/badge.svg)](https://github.com/SkysurfAI/skysurf/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)](https://github.com/SkysurfAI/skysurf)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
@@ -144,6 +146,10 @@ PRs welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the setup, style, and 
 ## License & trademark
 
 Source code is licensed under [Apache 2.0](LICENSE). The "Skysurf" name and logo are trademarks; see [`TRADEMARK.md`](TRADEMARK.md). The Apache license covers the code only — if you fork for a commercial managed service, please rename the fork.
+
+## Managed service
+
+Don't want to run this yourself? The same strategy is available as a managed service at **[skysurfai.com](https://www.skysurfai.com/)** — we handle the data pipeline, broker integration, GTT order placement, monitoring, and operational overhead. The strategy logic in this repo is identical to what runs there.
 
 ## Disclaimer
 

@@ -58,7 +58,7 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/SkysurfAI/skysurf"
+Homepage = "https://www.skysurfai.com/"
 Documentation = "https://github.com/SkysurfAI/skysurf/tree/main/docs"
 Repository = "https://github.com/SkysurfAI/skysurf"
 Issues = "https://github.com/SkysurfAI/skysurf/issues"
