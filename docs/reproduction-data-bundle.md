@@ -10,11 +10,26 @@ the `SKYSURF_REPRO_DATA` environment variable.
 
 There are two ways to obtain the bundle:
 
-1. **Download it** (pre-computed) and run `skysurf-reproduce`.
-2. **Regenerate it from raw daily OHLCV** with `skysurf-build` — the
-   open-sourced data pipeline. This is the license-clean path: bring your own
-   NSE OHLCV, and the code derives every intermediate. See
-   [Raw OHLCV inputs](#raw-ohlcv-inputs-for-skysurf-build) below.
+1. **Build it from raw OHLCV (recommended, one command).** The exact raw NSE daily
+   OHLCV behind the published backtest is hosted as a GitHub Release on this repo
+   (`repro-data-v1`, ~85 MB). `--from-ohlcv` rebuilds the entire bundle and
+   reproduces in a single step:
+
+   ```bash
+   pip install "skysurf[all]"
+   curl -L -o ohlcv.tar.gz \
+     https://github.com/SkysurfAI/skysurf/releases/download/repro-data-v1/skysurf-repro-ohlcv-v1.tar.gz
+   curl -L -O \
+     https://github.com/SkysurfAI/skysurf/releases/download/repro-data-v1/skysurf-repro-ohlcv-v1.sha256
+   shasum -a 256 -c skysurf-repro-ohlcv-v1.sha256          # verify integrity
+   mkdir repro-ohlcv && tar -xzf ohlcv.tar.gz -C repro-ohlcv
+   skysurf-reproduce --from-ohlcv repro-ohlcv --data bundle   # → MAR 1.96, PASS
+   ```
+
+   The release tarball contains `stocks_daily.parquet`, `benchmark_daily.parquet`,
+   `sector_daily.parquet`, and `sector_index_master.csv` (schemas below).
+2. **Download a pre-computed bundle** (if you have one) and run
+   `skysurf-reproduce --data DIR` directly, skipping the build.
 
 ## Raw OHLCV inputs (for `skysurf-build`)
 

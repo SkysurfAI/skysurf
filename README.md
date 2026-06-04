@@ -67,11 +67,28 @@ That's the whole production loop. Wire it into a Friday-evening cron, place GTT 
 
 ## Reproduce the backtest
 
-The walk-forward harness that produced the headline numbers ships **in the package** (`skysurf.reproduction`) as of v0.3.0. Given the reproduction **data bundle**, you reproduce the published result bit-for-bit from a fresh clone:
+The full pipeline ships **in the package** (`skysurf.reproduction`). Starting from
+**raw daily OHLCV** — hosted as a GitHub Release on this repo (~85 MB) — you
+rebuild every intermediate and reproduce the published result bit-for-bit, in one
+command:
 
 ```bash
-pip install skysurf                        # harness ships in the base install
-# download the data bundle (~450 MB) — see docs/reproduction-data-bundle.md
+pip install "skysurf[all]"
+curl -L -o ohlcv.tar.gz \
+  https://github.com/SkysurfAI/skysurf/releases/download/repro-data-v1/skysurf-repro-ohlcv-v1.tar.gz
+mkdir repro-ohlcv && tar -xzf ohlcv.tar.gz -C repro-ohlcv
+skysurf-reproduce --from-ohlcv repro-ohlcv --data bundle    # → MAR 1.96, PASS
+```
+
+`--from-ohlcv` runs the entire open chain — `skysurf-build` (OHLCV → weekly cache,
+regimes, entries) → `skysurf-build-sectors` (sector/cap-tier regimes + ticker
+metadata) → `skysurf-build-stats` (per-trade MFE/MAE) → the walk-forward — writing
+a complete bundle to `--data`, then asserts the headline within tolerance. Verify
+the download first with `shasum -a 256 -c` against the release's `.sha256` asset.
+
+If you already have a pre-built bundle, skip the build and point straight at it:
+
+```bash
 skysurf-reproduce --data /path/to/skysurf-repro-data
 ```
 
@@ -150,7 +167,7 @@ Decision tree and the full `DataProvider` interface in [`docs/connectors.md`](do
 **Doesn't**
 
 - Place orders. You wire the broker.
-- Provide market data. You bring it. NSE owns the licensed OHLCV data and we cannot redistribute it — including the reproduction data bundle, which is distributed separately from the code.
+- Provide market data for *your own* strategies. You bring it. For **reproduction**, the exact raw NSE daily OHLCV behind the published backtest is published as a GitHub Release (`repro-data-v1`) so anyone can reproduce the headline; for any other use you supply your own data.
 
 ## How the strategy works
 
