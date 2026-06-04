@@ -15,15 +15,17 @@ Validated over 16 years of weekly Indian-equity data (2010–2026):
 |---|---|---|---|
 | **1.96** | **24.13%** | **−12.31%** | **604** |
 
-*Reproducible from a fresh clone given the data bundle — see [Reproduce the backtest](#reproduce-the-backtest).*
+*Reproducible from a fresh clone given the data bundle (within tolerance) — see [Reproduce the backtest](#reproduce-the-backtest).*
 
 ---
 
 ## Install
 
 ```bash
-pip install skysurf
+pip install "skysurf @ git+https://github.com/SkysurfAI/skysurf@main"
 ```
+
+> Not on PyPI yet — install from source. Once published, `pip install skysurf` will work.
 
 Verify the install:
 
@@ -70,13 +72,13 @@ That's the whole production loop. Wire it into a Friday-evening cron, place GTT 
 The full pipeline ships **in the package** (`skysurf.reproduction`) as of v0.3.0. Starting from **raw daily OHLCV** — hosted as a GitHub Release on this repo (~85 MB) — you rebuild every intermediate and reproduce the published result in one command:
 
 ```bash
-pip install "skysurf[all]"
+pip install "skysurf[all] @ git+https://github.com/SkysurfAI/skysurf@main"
 BASE=https://github.com/SkysurfAI/skysurf/releases/download/repro-data-v1
 curl -L -O $BASE/skysurf-repro-ohlcv-v1.tar.gz
 curl -L -O $BASE/skysurf-repro-ohlcv-v1.sha256
 shasum -a 256 -c skysurf-repro-ohlcv-v1.sha256            # verify integrity → OK
 mkdir repro-ohlcv && tar -xzf skysurf-repro-ohlcv-v1.tar.gz -C repro-ohlcv
-skysurf-reproduce --from-ohlcv repro-ohlcv --data bundle    # → MAR 1.96, PASS
+skysurf-reproduce --from-ohlcv repro-ohlcv --data bundle    # → MAR ≈1.96 (within tolerance), PASS
 ```
 
 `--from-ohlcv` runs the entire open chain — `skysurf-build` → `skysurf-build-sectors` → `skysurf-build-stats` → the walk-forward — writing a complete bundle to `--data`, then asserts the headline. If you already have a pre-built bundle, skip the build with `skysurf-reproduce --data /path/to/skysurf-repro-data`.
