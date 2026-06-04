@@ -74,17 +74,18 @@ command:
 
 ```bash
 pip install "skysurf[all]"
-curl -L -o ohlcv.tar.gz \
-  https://github.com/SkysurfAI/skysurf/releases/download/repro-data-v1/skysurf-repro-ohlcv-v1.tar.gz
-mkdir repro-ohlcv && tar -xzf ohlcv.tar.gz -C repro-ohlcv
+BASE=https://github.com/SkysurfAI/skysurf/releases/download/repro-data-v1
+curl -L -O $BASE/skysurf-repro-ohlcv-v1.tar.gz
+curl -L -O $BASE/skysurf-repro-ohlcv-v1.sha256
+shasum -a 256 -c skysurf-repro-ohlcv-v1.sha256            # verify integrity → OK
+mkdir repro-ohlcv && tar -xzf skysurf-repro-ohlcv-v1.tar.gz -C repro-ohlcv
 skysurf-reproduce --from-ohlcv repro-ohlcv --data bundle    # → MAR 1.96, PASS
 ```
 
 `--from-ohlcv` runs the entire open chain — `skysurf-build` (OHLCV → weekly cache,
 regimes, entries) → `skysurf-build-sectors` (sector/cap-tier regimes + ticker
 metadata) → `skysurf-build-stats` (per-trade MFE/MAE) → the walk-forward — writing
-a complete bundle to `--data`, then asserts the headline within tolerance. Verify
-the download first with `shasum -a 256 -c` against the release's `.sha256` asset.
+a complete bundle to `--data`, then asserts the headline within tolerance.
 
 If you already have a pre-built bundle, skip the build and point straight at it:
 

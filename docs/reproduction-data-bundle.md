@@ -17,12 +17,11 @@ There are two ways to obtain the bundle:
 
    ```bash
    pip install "skysurf[all]"
-   curl -L -o ohlcv.tar.gz \
-     https://github.com/SkysurfAI/skysurf/releases/download/repro-data-v1/skysurf-repro-ohlcv-v1.tar.gz
-   curl -L -O \
-     https://github.com/SkysurfAI/skysurf/releases/download/repro-data-v1/skysurf-repro-ohlcv-v1.sha256
-   shasum -a 256 -c skysurf-repro-ohlcv-v1.sha256          # verify integrity
-   mkdir repro-ohlcv && tar -xzf ohlcv.tar.gz -C repro-ohlcv
+   BASE=https://github.com/SkysurfAI/skysurf/releases/download/repro-data-v1
+   curl -L -O $BASE/skysurf-repro-ohlcv-v1.tar.gz
+   curl -L -O $BASE/skysurf-repro-ohlcv-v1.sha256
+   shasum -a 256 -c skysurf-repro-ohlcv-v1.sha256          # verify integrity → OK
+   mkdir repro-ohlcv && tar -xzf skysurf-repro-ohlcv-v1.tar.gz -C repro-ohlcv
    skysurf-reproduce --from-ohlcv repro-ohlcv --data bundle   # → MAR 1.96, PASS
    ```
 
