@@ -28,7 +28,8 @@ There are two ways to obtain the bundle:
    The release tarball contains `stocks_daily.parquet`, `benchmark_daily.parquet`,
    `sector_daily.parquet`, and `sector_index_master.csv` (schemas below).
 2. **Download a pre-computed bundle** (if you have one) and run
-   `skysurf-reproduce --data DIR` directly, skipping the build.
+   `skysurf-reproduce --data DIR` directly, skipping the build. See
+   [Raw OHLCV inputs](#raw-ohlcv-inputs-for-skysurf-build) for the build path details.
 
 ## Raw OHLCV inputs (for `skysurf-build`)
 

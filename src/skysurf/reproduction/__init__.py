@@ -27,6 +27,7 @@ Or from the command line (ships with `pip install skysurf`)::
 Charts are optional; install ``skysurf[reproduction]`` for matplotlib output.
 The reproduction backtest itself runs on the base install.
 """
+
 from __future__ import annotations
 
 from ._paths import data_dir, set_data_dir
@@ -37,7 +38,7 @@ CONFIGS = ("phase4_best", "phase4_time_stop", "baseline")
 
 
 def reproduce(
-    data_dir: str | None = None,  # noqa: A002 - matches the public kwarg name
+    data_dir: str | None = None,
     config: str = "phase4_best",
     verbose: bool = True,
 ) -> dict:

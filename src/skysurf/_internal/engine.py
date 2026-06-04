@@ -42,7 +42,7 @@ import math
 from collections import Counter
 from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import pandas as pd
@@ -404,9 +404,9 @@ def decide_exits_for_week(
             continue
 
         row = sdf.loc[wk]
-        week_low = float(row["Low"])
-        week_open = float(row["Open"])
-        week_close = float(row["Close"])
+        week_low = float(cast(float, row["Low"]))
+        week_open = float(cast(float, row["Open"]))
+        week_close = float(cast(float, row["Close"]))
         atr_val = row.get("atr_14")
 
         # ── Triple-stack tightening: pick the trailing-MA column ──

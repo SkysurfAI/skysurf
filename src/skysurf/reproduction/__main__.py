@@ -1,4 +1,5 @@
 """Enable ``python -m skysurf.reproduction``."""
+
 from __future__ import annotations
 
 from .cli import main

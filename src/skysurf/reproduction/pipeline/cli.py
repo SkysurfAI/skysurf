@@ -1,8 +1,9 @@
 """CLI for regenerating the reproduction data bundle from raw OHLCV.
 
-    skysurf-build --ohlcv /path/to/raw_ohlcv --out /path/to/skysurf-repro-data
-    python -m skysurf.reproduction.pipeline --ohlcv ... --out ...
+skysurf-build --ohlcv /path/to/raw_ohlcv --out /path/to/skysurf-repro-data
+python -m skysurf.reproduction.pipeline --ohlcv ... --out ...
 """
+
 from __future__ import annotations
 
 import argparse

@@ -4,11 +4,11 @@ The import test runs everywhere. The end-to-end test generates a tiny synthetic
 OHLCV set and runs the full pipeline (no DB, no real data), asserting it emits
 entries_all.csv + entries_all_lagged.csv with the expected schema.
 """
+
 from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-import pytest
 
 
 def test_build_subpackage_imports():
@@ -57,10 +57,18 @@ def _write_synthetic_ohlcv(ohlcv_dir):
         rows.append(
             pd.DataFrame(
                 {
-                    "ticker": f"TEST{i}.NS", "date": days, "open": o, "high": h, "low": low,
-                    "close": c, "volume": v, "primary_sector": secs[i % len(secs)],
-                    "market_cap": 5e11, "has_demerger": False,
-                    "demerger_no_trade_until": pd.NaT, "has_sme_history": False,
+                    "ticker": f"TEST{i}.NS",
+                    "date": days,
+                    "open": o,
+                    "high": h,
+                    "low": low,
+                    "close": c,
+                    "volume": v,
+                    "primary_sector": secs[i % len(secs)],
+                    "market_cap": 5e11,
+                    "has_demerger": False,
+                    "demerger_no_trade_until": pd.NaT,
+                    "has_sme_history": False,
                 }
             )
         )
@@ -78,8 +86,11 @@ def test_build_end_to_end_on_synthetic_ohlcv(tmp_path):
     build.build(ohlcv_dir=str(ohlcv), data_dir=str(out), lagged=True)
 
     for name in (
-        "entries_all.csv", "entries_all_lagged.csv", "nifty_weekly.csv",
-        "regime_weekly.csv", "universe_quarterly.csv",
+        "entries_all.csv",
+        "entries_all_lagged.csv",
+        "nifty_weekly.csv",
+        "regime_weekly.csv",
+        "universe_quarterly.csv",
     ):
         assert (out / name).exists(), f"builder did not produce {name}"
 

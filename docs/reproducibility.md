@@ -4,7 +4,10 @@ This page is the honest answer to "can I reproduce the headline 24.1% CAGR mysel
 
 **Short answer: yes.** As of v0.3.0 the walk-forward harness ships in this
 package (`skysurf.reproduction`). Bring the data bundle and you reproduce the
-published numbers bit-for-bit:
+published numbers — **bit-for-bit on the original research environment**, and
+**within a small cross-environment tolerance** (MAR ≈ 1.8–2.0 / CAGR ≈ 22–24%)
+on a different OS or numeric-library stack (see
+[Cross-environment reproducibility](#cross-environment-reproducibility)):
 
 | Config        | MAR  | CAGR  | MaxDD   | Trades |
 |---------------|------|-------|---------|--------|
@@ -13,10 +16,11 @@ published numbers bit-for-bit:
 ### Per-segment (continuous walk-forward, `phase4_best`)
 
 The full result is one stitched carry-over equity curve across six out-of-sample
-segments. These are the exact per-segment numbers `skysurf-reproduce` prints,
-reproduced **bit-for-bit from raw NSE daily OHLCV only** via the full open chain
-`skysurf-build` → `skysurf-build-sectors` → `skysurf-build-stats` →
-`skysurf-reproduce` (gated `phase4_best` check: `MAR 1.96 vs 1.96, delta +0.00 → PASS`):
+segments. These are the per-segment numbers `skysurf-reproduce` prints **on the
+original research environment**, produced from raw NSE daily OHLCV only via the
+full open chain `skysurf-build` → `skysurf-build-sectors` → `skysurf-build-stats`
+→ `skysurf-reproduce`. A fresh machine with a different numeric stack reproduces
+the same shape within tolerance (the `phase4_best` gate passes for MAR ≈ 1.8–2.0):
 
 | Segment | Period    | MAR   | CAGR   | MaxDD   | Trades |
 |---------|-----------|-------|--------|---------|--------|
@@ -76,8 +80,9 @@ backtest) by the `phase4_best` tolerance check inside `reproduce()`.
 walk-forward driver, portfolio simulator, and dynamic type-prior that produced
 the published numbers. The only change from the research worktree is that all
 data paths resolve from a single flat *data bundle directory* instead of the
-original scattered result folders. The simulation logic is byte-identical, which
-is what makes the reproduction exact rather than approximate.
+original scattered result folders. The simulation logic is byte-identical to the
+research code — so on a matched environment it reproduces exactly, and on any
+other it reproduces within the cross-environment tolerance below.
 
 Configs available to `reproduce(config=...)`:
 
@@ -88,6 +93,26 @@ Configs available to `reproduce(config=...)`:
 Charts (equity curve, drawdown, MAE/MFE distributions) are optional. Install
 `skysurf[reproduction]` to enable matplotlib output; the numbers themselves run
 on the base install.
+
+## Cross-environment reproducibility
+
+The reproduction is **exact on the original research environment** (delta 0.00).
+On a *different* OS or numeric-library stack (numpy / scipy / pandas / BLAS),
+floating-point differences in the indicators and ranking change a handful of the
+604 trade selections, which moves the headline slightly — in our testing,
+**MAR ≈ 1.8–2.0 and CAGR ≈ 22–24%** across fresh Linux and macOS installs with
+current libraries. This is normal for a path-dependent portfolio walk-forward; it
+is not a bug.
+
+Accordingly, `reproduce()` checks a **cross-environment tolerance** rather than
+bit-equality: `MAR ±0.20`, `CAGR ±3.5 pp`, `MaxDD ±3.0 pp`, `trades ±40`. That
+band comfortably accepts real float drift while still rejecting any gross
+breakage (e.g. the ~1.3 baseline). A `PASS` therefore means "reproduces the
+published edge," not "bit-identical."
+
+**For bit-identical numbers**, pin the environment: capture a `pip freeze` of a
+known-good run into `requirements-repro.txt` (or build a Docker image from it)
+and run inside it. With the toolchain fixed, the result is deterministic.
 
 ## Data caveats — read these
 

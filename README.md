@@ -67,10 +67,7 @@ That's the whole production loop. Wire it into a Friday-evening cron, place GTT 
 
 ## Reproduce the backtest
 
-The full pipeline ships **in the package** (`skysurf.reproduction`). Starting from
-**raw daily OHLCV** — hosted as a GitHub Release on this repo (~85 MB) — you
-rebuild every intermediate and reproduce the published result bit-for-bit, in one
-command:
+The full pipeline ships **in the package** (`skysurf.reproduction`) as of v0.3.0. Starting from **raw daily OHLCV** — hosted as a GitHub Release on this repo (~85 MB) — you rebuild every intermediate and reproduce the published result in one command:
 
 ```bash
 pip install "skysurf[all]"
@@ -82,18 +79,9 @@ mkdir repro-ohlcv && tar -xzf skysurf-repro-ohlcv-v1.tar.gz -C repro-ohlcv
 skysurf-reproduce --from-ohlcv repro-ohlcv --data bundle    # → MAR 1.96, PASS
 ```
 
-`--from-ohlcv` runs the entire open chain — `skysurf-build` (OHLCV → weekly cache,
-regimes, entries) → `skysurf-build-sectors` (sector/cap-tier regimes + ticker
-metadata) → `skysurf-build-stats` (per-trade MFE/MAE) → the walk-forward — writing
-a complete bundle to `--data`, then asserts the headline within tolerance.
+`--from-ohlcv` runs the entire open chain — `skysurf-build` → `skysurf-build-sectors` → `skysurf-build-stats` → the walk-forward — writing a complete bundle to `--data`, then asserts the headline. If you already have a pre-built bundle, skip the build with `skysurf-reproduce --data /path/to/skysurf-repro-data`.
 
-If you already have a pre-built bundle, skip the build and point straight at it:
-
-```bash
-skysurf-reproduce --data /path/to/skysurf-repro-data
-```
-
-or from Python:
+Or from Python:
 
 ```python
 import skysurf.reproduction as repro
@@ -109,7 +97,15 @@ print(result["metrics"]["mar"])    # 1.96
 |---|---|---|---|---|
 | **Phase 4 (published)** | **1.96** | **24.13%** | **−12.31%** | **604** |
 
-Confirmed to reproduce exactly — MAR ±0.01, CAGR/MaxDD ±0.2 pp, trades ±3 — by an independent verification run (the gated test `test_phase4_best_reproduces_headline` asserts this). Cost drag: FLAT 1.99 MAR → ZERODHA 1.96 MAR (−0.42 pp CAGR).
+Independently verified: a fresh machine, installing from this repo and the data
+Release, reproduces the headline via one command. On the original research
+environment the result is **bit-for-bit identical**; on a different OS / numeric
+stack (numpy·scipy·pandas·BLAS) it lands **within a small tolerance** — typically
+**MAR ≈ 1.8–2.0 / CAGR ≈ 22–24%** — because float ops in the indicators and
+ranking shift a handful of trade selections. The `reproduce()` gate accepts that
+cross-environment band (MAR ±0.20, CAGR ±3.5 pp); for bit-exact numbers, pin the
+environment (see [`docs/reproducibility.md`](docs/reproducibility.md)). Cost
+drag: FLAT 1.99 MAR → ZERODHA 1.96 MAR (−0.42 pp CAGR).
 
 ### Continuous walk-forward structure
 
@@ -168,7 +164,7 @@ Decision tree and the full `DataProvider` interface in [`docs/connectors.md`](do
 **Doesn't**
 
 - Place orders. You wire the broker.
-- Provide market data for *your own* strategies. You bring it. For **reproduction**, the exact raw NSE daily OHLCV behind the published backtest is published as a GitHub Release (`repro-data-v1`) so anyone can reproduce the headline; for any other use you supply your own data.
+- Provide market data. You bring it. NSE owns the licensed OHLCV data and we cannot redistribute it — including the reproduction data bundle, which is distributed separately from the code.
 
 ## How the strategy works
 

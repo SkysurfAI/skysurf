@@ -96,6 +96,18 @@ include = [
 line-length = 100
 target-version = "py311"
 src = ["src", "tests", "examples"]
+# Verbatim research code (engine, detectors, builders) is excluded from BOTH the
+# linter and the formatter so its byte-for-byte logic is never reflowed. (Lint
+# per-file-ignores below don't affect `ruff format`, hence this exclude.)
+extend-exclude = [
+    "src/skysurf/reproduction/_research",
+    "src/skysurf/reproduction/pipeline/_calc",
+    "src/skysurf/reproduction/pipeline/_detect",
+    "src/skysurf/reproduction/pipeline/builder.py",
+    "src/skysurf/reproduction/pipeline/lagged.py",
+    "src/skysurf/reproduction/pipeline/entry_stats.py",
+    "src/skysurf/reproduction/pipeline/sector_regime.py",
+]
 
 [tool.ruff.lint]
 select = [
@@ -134,6 +146,8 @@ ignore = [
 "src/skysurf/reproduction/pipeline/_detect/*.py" = ["ALL"]
 "src/skysurf/reproduction/pipeline/builder.py" = ["ALL"]
 "src/skysurf/reproduction/pipeline/lagged.py" = ["ALL"]
+"src/skysurf/reproduction/pipeline/entry_stats.py" = ["ALL"]
+"src/skysurf/reproduction/pipeline/sector_regime.py" = ["ALL"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -147,27 +161,17 @@ warn_redundant_casts = true
 warn_return_any = true
 disallow_untyped_decorators = true
 files = ["src/skysurf"]
-# Verbatim research code is not type-annotated to library standards.
-exclude = [
-    "src/skysurf/reproduction/_research/.*",
-    "src/skysurf/reproduction/pipeline/_calc/.*",
-    "src/skysurf/reproduction/pipeline/_detect/.*",
-    "src/skysurf/reproduction/pipeline/builder.py",
-    "src/skysurf/reproduction/pipeline/lagged.py",
-]
+# The reproduction subpackage is verbatim research code + thin reproduction
+# wrappers (not the typed production-library surface), so it is excluded from
+# the strict type check. The core library remains fully `mypy --strict`.
+exclude = ["src/skysurf/reproduction/"]
 
 [[tool.mypy.overrides]]
 module = ["ta.*", "scipy.*", "pyarrow.*", "trendln.*", "matplotlib.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-module = [
-    "skysurf.reproduction._research.*",
-    "skysurf.reproduction.pipeline._calc.*",
-    "skysurf.reproduction.pipeline._detect.*",
-    "skysurf.reproduction.pipeline.builder",
-    "skysurf.reproduction.pipeline.lagged",
-]
+module = ["skysurf.reproduction.*"]
 ignore_errors = true
 
 # ── Tests / coverage ────────────────────────────────────────────────
@@ -190,11 +194,14 @@ branch = true
 source = ["skysurf"]
 parallel = true
 omit = [
+    "src/skysurf/reproduction/*",
     "src/skysurf/reproduction/_research/*",
     "src/skysurf/reproduction/pipeline/_calc/*",
     "src/skysurf/reproduction/pipeline/_detect/*",
     "src/skysurf/reproduction/pipeline/builder.py",
     "src/skysurf/reproduction/pipeline/lagged.py",
+    "src/skysurf/reproduction/pipeline/entry_stats.py",
+    "src/skysurf/reproduction/pipeline/sector_regime.py",
 ]
 
 [tool.coverage.report]

@@ -16,6 +16,7 @@ because they bind their path constants at import time. The public API enforces
 this by importing the research modules lazily, only after the data directory is
 resolved.
 """
+
 from __future__ import annotations
 
 import os

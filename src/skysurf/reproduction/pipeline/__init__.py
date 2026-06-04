@@ -28,9 +28,10 @@ a fully runnable bundle (``entries_all_lagged.csv`` via ``rebuild_entries_lagged
 and ``trade_stats_all.csv`` via the entry-stats generator). See the bundle doc
 for the remaining steps.
 """
+
 from __future__ import annotations
 
-from .. import _paths
+from skysurf.reproduction import _paths
 
 __all__ = ["build", "build_all", "build_lagged", "build_entry_stats", "build_sector_dimensions"]
 
@@ -64,7 +65,9 @@ def build_all(
     if ohlcv_dir is not None:
         _paths.set_ohlcv_dir(ohlcv_dir)
 
-    out = build(ohlcv_dir=_paths.ohlcv_dir(), data_dir=_paths.data_dir(), lagged=True, verbose=verbose)
+    out = build(
+        ohlcv_dir=_paths.ohlcv_dir(), data_dir=_paths.data_dir(), lagged=True, verbose=verbose
+    )
     build_sector_dimensions(ohlcv_dir=_paths.ohlcv_dir(), data_dir=_paths.data_dir())
     build_entry_stats(data_dir=_paths.data_dir())
     return out

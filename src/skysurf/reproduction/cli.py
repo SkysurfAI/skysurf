@@ -5,6 +5,7 @@ Exposed two ways, both shipped by ``pip install skysurf``:
     python -m skysurf.reproduction --data /path/to/skysurf-repro-data
     skysurf-reproduce --data /path/to/skysurf-repro-data --config phase4_best
 """
+
 from __future__ import annotations
 
 import argparse
