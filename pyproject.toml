@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "skysurf"
-version = "0.2.0"
+version = "0.3.0"
 description = "Production trading-signal library implementing the Skysurf Phase 4 strategy."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -43,7 +43,10 @@ dependencies = [
 parquet = ["pyarrow>=15.0"]
 sqlalchemy = ["sqlalchemy>=2.0"]
 trendlines = ["trendln>=0.1.10"]
-all = ["pyarrow>=15.0", "sqlalchemy>=2.0", "trendln>=0.1.10"]
+# Optional charts for the reproduction backtest (trades / equity / drawdown PNGs).
+# The reproduction numbers themselves run on the base install — no extra needed.
+reproduction = ["matplotlib>=3.7"]
+all = ["pyarrow>=15.0", "sqlalchemy>=2.0", "trendln>=0.1.10", "matplotlib>=3.7"]
 dev = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
@@ -53,9 +56,14 @@ dev = [
     "pyarrow>=15.0",
     "sqlalchemy>=2.0",
     "trendln>=0.1.10",
+    "matplotlib>=3.7",
     "build>=1.2",
     "twine>=5.0",
 ]
+
+# Console entry point — ships with `pip install skysurf`.
+[project.scripts]
+skysurf-reproduce = "skysurf.reproduction.cli:main"
 
 [project.urls]
 Homepage = "https://www.skysurfai.com/"
@@ -116,6 +124,9 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["B011", "PT011", "PT012"]
 "examples/**/*.py" = ["T201"]  # allow print()
+# The reproduction subpackage is verbatim research code; exempt it from the
+# library's strict style so the simulation logic stays byte-identical.
+"src/skysurf/reproduction/_research/*.py" = ["ALL"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -129,10 +140,16 @@ warn_redundant_casts = true
 warn_return_any = true
 disallow_untyped_decorators = true
 files = ["src/skysurf"]
+# Verbatim research code is not type-annotated to library standards.
+exclude = ["src/skysurf/reproduction/_research/.*"]
 
 [[tool.mypy.overrides]]
-module = ["ta.*", "scipy.*", "pyarrow.*", "trendln.*"]
+module = ["ta.*", "scipy.*", "pyarrow.*", "trendln.*", "matplotlib.*"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["skysurf.reproduction._research.*"]
+ignore_errors = true
 
 # ── Tests / coverage ────────────────────────────────────────────────
 [tool.pytest.ini_options]
@@ -146,12 +163,14 @@ addopts = [
 testpaths = ["tests"]
 markers = [
     "integration: tests that need external data (gated by SKYSURF_TEST_DATA)",
+    "reproduction: full backtest reproduction (gated by SKYSURF_REPRO_DATA)",
 ]
 
 [tool.coverage.run]
 branch = true
 source = ["skysurf"]
 parallel = true
+omit = ["src/skysurf/reproduction/_research/*"]
 
 [tool.coverage.report]
 # v0.2.0 baseline: 60% as the engine just landed. The engine modules
