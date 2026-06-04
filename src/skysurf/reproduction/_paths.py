@@ -22,12 +22,33 @@ import os
 from pathlib import Path
 
 _OVERRIDE: Path | None = None
+_OHLCV_OVERRIDE: Path | None = None
 
 
 def set_data_dir(path: str | os.PathLike[str]) -> None:
     """Set an explicit data-bundle directory (takes precedence over the env var)."""
     global _OVERRIDE
     _OVERRIDE = Path(path).expanduser().resolve()
+
+
+def set_ohlcv_dir(path: str | os.PathLike[str]) -> None:
+    """Set the raw daily-OHLCV input directory used by the builder."""
+    global _OHLCV_OVERRIDE
+    _OHLCV_OVERRIDE = Path(path).expanduser().resolve()
+
+
+def ohlcv_dir() -> Path:
+    """Return the raw daily-OHLCV input directory (builder input).
+
+    Resolution: :func:`set_ohlcv_dir` → ``SKYSURF_REPRO_OHLCV`` env var →
+    ``./skysurf-repro-ohlcv``.
+    """
+    if _OHLCV_OVERRIDE is not None:
+        return _OHLCV_OVERRIDE
+    env = os.environ.get("SKYSURF_REPRO_OHLCV")
+    if env:
+        return Path(env).expanduser().resolve()
+    return (Path.cwd() / "skysurf-repro-ohlcv").resolve()
 
 
 def data_dir() -> Path:

@@ -32,6 +32,16 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     p.add_argument(
+        "--from-ohlcv",
+        metavar="DIR",
+        default=None,
+        help=(
+            "One-command mode: build the entire bundle from raw daily OHLCV in DIR "
+            "(stocks_daily + benchmark_daily + sector_daily + sector_index_master), "
+            "then reproduce. Writes the bundle to --data."
+        ),
+    )
+    p.add_argument(
         "--config",
         choices=list(CONFIGS),
         default="phase4_best",
@@ -53,6 +63,11 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
+        if args.from_ohlcv:
+            # One-command mode: raw OHLCV -> full bundle -> reproduce.
+            from .pipeline import build_all
+
+            build_all(ohlcv_dir=args.from_ohlcv, data_dir=args.data)
         if args.full_report:
             run_full_report(data_dir=args.data)
             return 0

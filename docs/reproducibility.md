@@ -10,6 +10,28 @@ published numbers bit-for-bit:
 |---------------|------|-------|---------|--------|
 | Phase4 Best   | 1.96 | 24.1% | −12.3%  | 604    |
 
+### Per-segment (continuous walk-forward, `phase4_best`)
+
+The full result is one stitched carry-over equity curve across six out-of-sample
+segments. These are the exact per-segment numbers `skysurf-reproduce` prints,
+reproduced **bit-for-bit from raw NSE daily OHLCV only** via the full open chain
+`skysurf-build` → `skysurf-build-sectors` → `skysurf-build-stats` →
+`skysurf-reproduce` (gated `phase4_best` check: `MAR 1.96 vs 1.96, delta +0.00 → PASS`):
+
+| Segment | Period    | MAR   | CAGR   | MaxDD   | Trades |
+|---------|-----------|-------|--------|---------|--------|
+| 0       | 2010–2012 |  1.51 |  18.1% | −12.0%  |  79    |
+| 1       | 2013–2015 |  3.49 |  25.0% |  −7.2%  | 115    |
+| 2       | 2016–2018 |  1.35 |  14.2% | −10.5%  | 127    |
+| 3       | 2019–2021 |  3.22 |  34.6% | −10.7%  | 105    |
+| 4       | 2022–2024 |  3.42 |  42.1% | −12.3%  | 129    |
+| 5       | 2025–2026 | −0.48 |  −4.8% |  −9.9%  |  49    |
+| **Full**| 2010–2026 |**1.96**|**24.13%**|**−12.31%**|**604**|
+
+The **Full** row is the continuous curve, not an average of the segments. For
+reference the other two configs reproduce as: `baseline` MAR 1.42 (CAGR 15.5%,
+210 trades) and `phase4_time_stop` MAR 2.05 (CAGR 22.3%, 636 trades).
+
 ## TL;DR
 
 ```bash

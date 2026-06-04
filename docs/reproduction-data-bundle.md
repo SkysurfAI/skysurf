@@ -8,7 +8,61 @@ match this layout and the backtest reproduces the published numbers bit-for-bit.
 Point the library at the bundle with `--data DIR`, `reproduce(data_dir=DIR)`, or
 the `SKYSURF_REPRO_DATA` environment variable.
 
-## Layout
+There are two ways to obtain the bundle:
+
+1. **Download it** (pre-computed) and run `skysurf-reproduce`.
+2. **Regenerate it from raw daily OHLCV** with `skysurf-build` — the
+   open-sourced data pipeline. This is the license-clean path: bring your own
+   NSE OHLCV, and the code derives every intermediate. See
+   [Raw OHLCV inputs](#raw-ohlcv-inputs-for-skysurf-build) below.
+
+## Raw OHLCV inputs (for `skysurf-build`)
+
+`skysurf-build --ohlcv DIR --out BUNDLE` reads raw **daily** OHLCV from `DIR`
+and writes the derived intermediates into `BUNDLE`. Two files (`.parquet`
+preferred, `.csv` accepted):
+
+### `stocks_daily.parquet` / `.csv`
+One row per ticker per trading day.
+
+| column | type | notes |
+|---|---|---|
+| `ticker` | str | NSE symbol, e.g. `RELIANCE.NS` |
+| `date` | date | trading day |
+| `open` `high` `low` `close` | float | split-adjusted, not dividend-adjusted |
+| `volume` | int | |
+| `primary_sector` | str | e.g. `NIFTY IT` (required for universe + sector mapping) |
+| `market_cap` | float | INR (required; drives the quarterly universe filter) |
+| `has_demerger` | bool | optional corporate-action flags |
+| `demerger_no_trade_until` | date/null | optional |
+| `has_sme_history` | bool | optional; SME names are excluded when present |
+
+### `benchmark_daily.parquet` / `.csv`
+Nifty 50 daily, one row per trading day: `date, open, high, low, close, volume`.
+
+From these, `skysurf-build` regenerates: `stock_weekly_cache/`, `nifty_weekly.csv`,
+`regime_weekly.csv`, `breadth_weekly.csv`, `universe_quarterly.csv`,
+`entries_all.csv`, and `entries_all_lagged.csv`.
+
+### `sector_daily.parquet` / `.csv` (extra raw input for sector regimes)
+Per-index daily OHLCV for the NIFTY sector and cap-tier indices (and `NIFTY 50`,
+used as the relative-strength benchmark). One row per index per trading day:
+`index_symbol, trade_date, open, high, low, close, volume`.
+
+The remaining bundle CSVs now regenerate too — the OHLCV-only loop is closed:
+- `skysurf-build-sectors` (`pipeline.sector_regime`) reads `sector_daily` +
+  `stocks_daily` → `sector_regime_weekly.csv`, `captier_regime_weekly.csv`,
+  `ticker_metadata.csv` (+ diagnostic `sector_breadth_weekly.csv`).
+- `skysurf-build-stats` (`pipeline.entry_stats`) reads `entries_all.csv` +
+  `stock_weekly_cache/` → `trade_stats_all.csv`.
+
+So the full build is: `skysurf-build` → `skysurf-build-sectors` →
+`skysurf-build-stats` → `skysurf-reproduce`. You may still download the
+pre-computed bundle instead of rebuilding.
+
+---
+
+## Derived bundle layout (what `skysurf.reproduction` consumes)
 
 ```
 skysurf-repro-data/

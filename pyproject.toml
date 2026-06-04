@@ -61,9 +61,12 @@ dev = [
     "twine>=5.0",
 ]
 
-# Console entry point — ships with `pip install skysurf`.
+# Console entry points — ship with `pip install skysurf`.
 [project.scripts]
 skysurf-reproduce = "skysurf.reproduction.cli:main"
+skysurf-build = "skysurf.reproduction.pipeline.cli:main"
+skysurf-build-stats = "skysurf.reproduction.pipeline.entry_stats:_cli"
+skysurf-build-sectors = "skysurf.reproduction.pipeline.sector_regime:_cli"
 
 [project.urls]
 Homepage = "https://www.skysurfai.com/"
@@ -127,6 +130,10 @@ ignore = [
 # The reproduction subpackage is verbatim research code; exempt it from the
 # library's strict style so the simulation logic stays byte-identical.
 "src/skysurf/reproduction/_research/*.py" = ["ALL"]
+"src/skysurf/reproduction/pipeline/_calc/*.py" = ["ALL"]
+"src/skysurf/reproduction/pipeline/_detect/*.py" = ["ALL"]
+"src/skysurf/reproduction/pipeline/builder.py" = ["ALL"]
+"src/skysurf/reproduction/pipeline/lagged.py" = ["ALL"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -141,14 +148,26 @@ warn_return_any = true
 disallow_untyped_decorators = true
 files = ["src/skysurf"]
 # Verbatim research code is not type-annotated to library standards.
-exclude = ["src/skysurf/reproduction/_research/.*"]
+exclude = [
+    "src/skysurf/reproduction/_research/.*",
+    "src/skysurf/reproduction/pipeline/_calc/.*",
+    "src/skysurf/reproduction/pipeline/_detect/.*",
+    "src/skysurf/reproduction/pipeline/builder.py",
+    "src/skysurf/reproduction/pipeline/lagged.py",
+]
 
 [[tool.mypy.overrides]]
 module = ["ta.*", "scipy.*", "pyarrow.*", "trendln.*", "matplotlib.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-module = ["skysurf.reproduction._research.*"]
+module = [
+    "skysurf.reproduction._research.*",
+    "skysurf.reproduction.pipeline._calc.*",
+    "skysurf.reproduction.pipeline._detect.*",
+    "skysurf.reproduction.pipeline.builder",
+    "skysurf.reproduction.pipeline.lagged",
+]
 ignore_errors = true
 
 # ── Tests / coverage ────────────────────────────────────────────────
@@ -170,7 +189,13 @@ markers = [
 branch = true
 source = ["skysurf"]
 parallel = true
-omit = ["src/skysurf/reproduction/_research/*"]
+omit = [
+    "src/skysurf/reproduction/_research/*",
+    "src/skysurf/reproduction/pipeline/_calc/*",
+    "src/skysurf/reproduction/pipeline/_detect/*",
+    "src/skysurf/reproduction/pipeline/builder.py",
+    "src/skysurf/reproduction/pipeline/lagged.py",
+]
 
 [tool.coverage.report]
 # v0.2.0 baseline: 60% as the engine just landed. The engine modules
